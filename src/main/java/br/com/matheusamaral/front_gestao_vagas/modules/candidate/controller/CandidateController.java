@@ -45,11 +45,6 @@ public class CandidateController {
         return "candidate/login";
     }
 
-    @GetMapping("/create")
-    public String create() {
-        return "candidate/create";
-    }
-
     @PostMapping("/signIn")
     public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password) {
 
@@ -110,6 +105,18 @@ public class CandidateController {
     public String applyJob(@RequestParam("jobId") UUID jobId) {
         this.applyJobService.execute(getToken(), jobId);
         return "redirect:/candidate/jobs";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("candidate", new CreateCandidateDTO());
+        return "candidate/create";
+    }
+
+    @PostMapping("/create")
+    public String save(CreateCandidateDTO candidate, Model model) {
+        model.addAttribute("candidate", candidate);
+        return "redirect:/candidate/login";
     }
 
     private String getToken() {
