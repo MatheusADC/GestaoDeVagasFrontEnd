@@ -39,6 +39,9 @@ public class CandidateController {
 
     @Autowired
     private ApplyJobService applyJobService;
+
+    @Autowired
+    private CreateCandidateService createCandidateService;
     
     @GetMapping("/login")
     public String login() {
@@ -115,6 +118,14 @@ public class CandidateController {
 
     @PostMapping("/create")
     public String save(CreateCandidateDTO candidate, Model model) {
+
+        try{
+            this.createCandidateService.execute(candidate);
+            
+        } catch (HttpClientErrorException ex){
+            model.addAttribute("error_message", ex.getMessage());
+        }    
+
         model.addAttribute("candidate", candidate);
         return "redirect:/candidate/login";
     }
